@@ -14,6 +14,8 @@ int getN();
 void problem1();
 void problem2();
 void problem3();
+void problem4();
+void problem5();
 void def(int);
 
 int main(int argc, char** argv) {
@@ -31,6 +33,12 @@ int main(int argc, char** argv) {
             case 3:
                 problem3();
                 break;
+            case 4:
+                problem4();
+                break;
+            case 5:
+                problem5();
+                break;
             default:
                 def(inN);
         }    
@@ -42,9 +50,11 @@ int main(int argc, char** argv) {
 void menu()
 {
     cout<<"Type 1 for Problem 9.2\n";
-    cout<<"Type 2 for Problem 9.6\n";
-    cout<<"Type 3 for Problem 9.7\n";
-    cout<<"Type 4 to exit\n";
+    cout<<"Type 2 for Problem 9.5\n";
+    cout<<"Type 3 for Problem 9.6\n";
+    cout<<"Type 4 for Problem 9.7\n";
+    cout<<"Type 5 for Problem 9.8\n";
+    cout<<"Type 6 to exit\n";
 }
 
 int getN()
@@ -62,8 +72,14 @@ void problem1()
             "for are consistently found in the array.)\n";
 }
 
-//Problem 9.6
+//Problem 9.5
 void problem2()
+{
+    
+}
+
+//Problem 9.6
+void problem3()
 {
     cout<<"What one line of code would need to be modified in the bubble sort"
             " to make it sort in descending, rather than ascending order? "
@@ -73,10 +89,21 @@ void problem2()
 }
 
 //Problem 9.7
-void problem3()
+void problem4()
 {
     cout<<"After one pass of bubble sort, which value is in order?\n";
-    cout<<"The value 1 will be in the right place.\n\n";
+    cout<<"The unsorted values are: 7 2 3 8 9 1\n";
+    cout<<"After 1 pass: 1 7 3 8 9 2\n";
+    cout<<"The 1 and 3 will be in the correct spot.\n\n";
+}
+
+//Problem 9.8
+void problem5()
+{
+    cout<<"After one pass of selection sort, which value is in order?\n";
+    cout<<"The unsorted values are: 5 7 2 8 9 1\n";
+    cout<<"After 1 pass: 1 7 2 8 9 5\n";
+    cout<<"The 1 will be in the correct spot.\n\n";
 }
 
 void def(int inN)

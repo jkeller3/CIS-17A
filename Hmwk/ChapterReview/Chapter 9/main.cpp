@@ -14,9 +14,9 @@ void problem6();
 vector<int> obtainValues();
 void outputArray(int[],int); 
 void sort(int[], int); 
-void mean(int[], int);
-void median(int[], int);
-void findMode(int[], int);
+float mean(int[], int);
+float median(int[], int);
+void mode(int[], int);
 int findMaxRepeat(int[], int);
 int findModeCount(int[], int, int);
 void displayMode(int[], int);
@@ -127,9 +127,11 @@ void problem6()
     outputArray(array,size);
     sort(array,size);
     outputArray(array,size);
-    mean(array,size);
-    median(array,size);
-    findMode(array,size);
+    float avg = mean(array,size);
+    cout<<"The mean is: "<<avg<<".\n";
+    float med = median(array,size);
+    cout<<"The median is: "<<med<<".\n";
+    mode(array,size);
     array = new int;
     delete array;
     array = NULL;
@@ -185,7 +187,7 @@ void sort(int num[], int size)
 }
 
 //Finds the mean, or average of the array.
-void mean(int num[], int size)
+float mean(int num[], int size)
 {
     int sum = 0;
     for(int i=0; i<size; i++)
@@ -193,27 +195,27 @@ void mean(int num[], int size)
         sum+=num[i];
     }
     float mean = sum/static_cast<float>(size);
-    cout<<"The mean is: "<<mean<<".\n";
+    return mean;
 }
 
 //Finds the median, or middle number(s) of the array
-void median(int num[], int size)
+float median(int num[], int size)
 {
     float median=0;
     if(size%2==1)
     {
         median=num[size/2];
-        cout<<"The median is: "<<median<<".\n";
+        return median;
     }
     if(size%2==0)
     {
         median=(num[size/2]+num[(size/2)-1])/static_cast<float>(2);
-        cout<<"The median is: "<<median<<".\n";
+        return median;
     }
 }
 
 //Searches for the most repeating number(s) of the array
-void findMode(int num[], int size)
+void mode(int num[], int size)
 {
     int maxRepeat = findMaxRepeat(num, size); 
     //Finds highest frequency of repeating numbers
@@ -247,8 +249,7 @@ void findMode(int num[], int size)
             number = num[i];
         }
     }
-    displayMode(mode, modeCount);    
-    //Outputs the results of the mode search.
+    displayMode(mode,modeCount);
 }
 
 //Searches for the highest frequency of repeating numbers

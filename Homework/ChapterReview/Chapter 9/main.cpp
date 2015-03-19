@@ -1,12 +1,6 @@
-/* 
- * File:   main.cpp
- * Author: Joseph Keller
- *
- * Created on March 2, 2015, 3:36 PM
- */
-
 #include <iostream>
-
+#include <cstdlib>
+#include <vector>
 using namespace std;
 
 void menu();
@@ -16,6 +10,16 @@ void problem2();
 void problem3();
 void problem4();
 void problem5();
+void problem6();
+vector<int> obtainValues();
+void outputArray(int[],int); 
+void sort(int[], int); 
+void mean(int[], int);
+void median(int[], int);
+void findMode(int[], int);
+int findMaxRepeat(int[], int);
+int findModeCount(int[], int, int);
+void displayMode(int[], int);
 void def(int);
 
 int main(int argc, char** argv) {
@@ -39,10 +43,13 @@ int main(int argc, char** argv) {
             case 5:
                 problem5();
                 break;
+            case 6:
+                problem6();
+                break;
             default:
                 def(inN);
         }    
-    }while(inN<4);
+    }while(inN<7);
 
     return 0;
 }
@@ -54,7 +61,8 @@ void menu()
     cout<<"Type 3 for Problem 9.6\n";
     cout<<"Type 4 for Problem 9.7\n";
     cout<<"Type 5 for Problem 9.8\n";
-    cout<<"Type 6 to exit\n";
+    cout<<"Type 6 for Mean Median Mode problem\n";
+    cout<<"Type 7 to exit\n";
 }
 
 int getN()
@@ -70,12 +78,16 @@ void problem1()
     cout<<"On average, with an array of 20,000 elements, how many comparisons"
             " will the linear search perform? (Assume the items being search "
             "for are consistently found in the array.)\n";
+    cout<<"It'll take on average N/2 attempts, so in this case it would take "
+            "10,000 attempts on average.\n\n";
 }
 
 //Problem 9.5
 void problem2()
 {
-    
+    cout<<"True or false: Any sort can be modified to sort in either ascending" 
+           " or descending order.\n";
+    cout<<"True.\n\n";
 }
 
 //Problem 9.6
@@ -104,6 +116,207 @@ void problem5()
     cout<<"The unsorted values are: 5 7 2 8 9 1\n";
     cout<<"After 1 pass: 1 7 2 8 9 5\n";
     cout<<"The 1 will be in the correct spot.\n\n";
+}
+
+//Mean median and mode problem
+void problem6()
+{
+    vector<int>numbers = obtainValues();
+    int size = numbers.size();
+    int *array = numbers.data();
+    outputArray(array,size);
+    sort(array,size);
+    outputArray(array,size);
+    mean(array,size);
+    median(array,size);
+    findMode(array,size);
+    array = new int;
+    delete array;
+    array = NULL;
+}
+
+//Obtain values via vector since it is unknown how many numbers will be input.
+vector<int> obtainValues()
+{
+    vector<int>numbers;
+    int input = 0;
+    cout<<"Enter as many numbers as you would like.\n";
+    cout<<"Enter -1 when you would like to stop.\n";
+    do{
+        cin>>input;
+        if(input!=-1)
+        {
+            numbers.push_back(input);
+        }    
+    }while(input!=-1);
+    return numbers;
+}
+
+//Outputs the values in the array.
+void outputArray(int num[], int size)
+{
+    for(int i=0;i<size;i++)
+    {
+        cout<<num[i]<<" ";
+    }
+    cout<<"\n\n";
+}
+
+//Bubble sort. Lowest to highest number.
+void sort(int num[], int size)
+{
+    int i, j, flag = 1;
+    int temp;
+    for(i = 1; (i <= size) && flag; i++)
+    {
+        flag = 0;
+        for (j=0; j < (size -1); j++)
+        {
+            if (num[j+1] < num[j])
+            {
+                temp = num[j];
+                num[j] = num[j+1];
+                num[j+1] = temp;
+                flag = 1;
+            }
+        }
+    }
+    return;
+}
+
+//Finds the mean, or average of the array.
+void mean(int num[], int size)
+{
+    int sum = 0;
+    for(int i=0; i<size; i++)
+    {
+        sum+=num[i];
+    }
+    float mean = sum/static_cast<float>(size);
+    cout<<"The mean is: "<<mean<<".\n";
+}
+
+//Finds the median, or middle number(s) of the array
+void median(int num[], int size)
+{
+    float median=0;
+    if(size%2==1)
+    {
+        median=num[size/2];
+        cout<<"The median is: "<<median<<".\n";
+    }
+    if(size%2==0)
+    {
+        median=(num[size/2]+num[(size/2)-1])/static_cast<float>(2);
+        cout<<"The median is: "<<median<<".\n";
+    }
+}
+
+//Searches for the most repeating number(s) of the array
+void findMode(int num[], int size)
+{
+    int maxRepeat = findMaxRepeat(num, size); 
+    //Finds highest frequency of repeating numbers
+    if(maxRepeat==1)//If highest frequency is 1, quits searching here.
+    {
+        displayMode(0,0);
+        return;
+    }
+    int modeCount = findModeCount(num, size, maxRepeat);
+    //Finds the amount of numbers that reach the highest frequency of repeats.
+    int mode[modeCount-1];
+    //Inserts the amount of modes there are.
+    modeCount=0;
+    int repeat=1;
+    int number=num[0];
+    for(int i=1; i<=size; i++)
+    {
+        if(num[i] == number)
+        {
+            repeat++;
+        }
+        else
+        {
+            if(repeat == maxRepeat)
+            //Places the modes inside the mode array.
+            {
+                mode[modeCount]=number;
+                modeCount++;
+            }
+            repeat = 1;
+            number = num[i];
+        }
+    }
+    displayMode(mode, modeCount);    
+    //Outputs the results of the mode search.
+}
+
+//Searches for the highest frequency of repeating numbers
+int findMaxRepeat(int num[], int size)
+{
+    int number = num[0];
+    int repeat = 1;
+    int maxRepeat = 1;
+    for (int i=1; i<=size; i++)
+    {
+        if(num[i] == number)
+        {
+            repeat++;
+        }
+        else
+        {
+            if(repeat>maxRepeat)
+            {
+                maxRepeat=repeat;
+            }
+            repeat = 1;
+            number = num[i];
+        }
+    }
+    return maxRepeat;
+}
+
+//Finds the amount of numbers that reach the highest frequency.
+int findModeCount(int num[], int size, int maxRepeat)
+{
+    int modeCount = 0;
+    int repeat = 1;
+    int number = num[0];
+    for (int i=1; i<=size; i++)
+    {
+        if(num[i] == number)
+        {
+            repeat++;
+        }
+        else
+        {
+            if(repeat == maxRepeat)
+            {
+                modeCount++;
+            }
+            repeat = 1;
+            number = num[i];
+        }
+    }
+    return modeCount;
+}
+
+//Displays the output for the mode.
+void displayMode(int array[], int size)
+{
+    if(size==0)
+    {
+        cout<<"There is no mode.\n\n";
+    }
+    else if(size==1)
+    {
+        cout<<"The mode is: "<<array[0]<<".\n\n";
+    }
+    else
+    {
+        cout<<"The modes are: ";
+        outputArray(array, size);
+    }
 }
 
 void def(int inN)
